@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💥 GESTION DES CONFLITS | Comic Presentation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preload" as="image" href="{{ url_for('static', filename='img/bg/bg-1.jpg') }}">
+    <link rel="preload" as="image" href="{{ url_for('static', filename='img/bg/bg-2.jpg') }}">
+    <link rel="preload" as="image" href="{{ url_for('static', filename='img/bg/bg-3.jpg') }}">
+</head>
+<body class="comic-body">
+    <noscript><div class="noscript-warning">⚠️ JavaScript est désactivé : la navigation de la présentation ne fonctionnera pas. Activez JavaScript pour en profiter.</div></noscript>
+    <div class="halftone-bg"></div>
+
+    <main class="presentation">
+        <!-- SLIDE 01: COVER -->
+        <section class="slide active" id="slide-1">
+            <div class="cover-layout">
+                <h1 class="title-main" style="margin-bottom: 20px; text-shadow: 4px 4px 0 var(--paper-white), 7px 7px 0 var(--ink-black);">💥 GESTION DES CONFLITS</h1>
+                <div class="comic-explosion cover-burst" style="margin-bottom: 30px;">CONFLICT!</div>
+                <p class="cover-tagline" style="margin-bottom: 50px;">"Transformer un conflit en solution"</p>
+                <div class="split-comic">
+                    <div class="flex-column">
+                        <div class="character oussama">OUSSAMA</div>
+                        <div class="speech-bubble oussama">Attends...</div>
+                    </div>
+                    <div class="flex-column">
+                        <div class="character taha">TAHA</div>
+                        <div class="speech-bubble taha">Quoi ?!</div>
+                    </div>
+                </div>
+                <div class="start-hint">Cliquez sur SUIVANT ou appuyez sur → pour commencer</div>
+            </div>
+        </section>
+
+        <!-- SLIDE 02: DEFINITION -->
+        <section class="slide" id="slide-2">
+            <h2 class="section-title">💥 C'est quoi un conflit ?</h2>
+            <div class="split-comic" style="grid-row: span 5; margin-top: 20px;">
+                <div class="flex-column">
+                    <div class="character taha">TAHA</div>
+                    <div class="speech-bubble taha">Un conflit, c'est forcément une dispute ?</div>
+                </div>
+                <div class="flex-column">
+                    <div class="character oussama">OUSSAMA</div>
+                    <div class="speech-bubble oussama">Pas forcément. C'est surtout un désaccord entre deux personnes.</div>
+                </div>
+            </div>
+            <div class="split-comic" style="grid-row: span 4; margin-top: 40px;">
+                <div class="keyword">⚡ Désaccord</div>
+                <div class="keyword">💬 Différence d'opinion</div>
+                <div class="keyword">🎯 Intérêts différents</div>
+            </div>
+        </section>
+
+        <!-- SLIDE 03: BIRTH -->
+        <section class="slide" id="slide-3">
+            <h2 class="section-title">⚡ Comment ça commence ?</h2>
+            <div class="grid-panels" style="grid-row: span 6; margin-top: 20px;">
+                <div class="comic-panel">
+                    <div class="speech-bubble taha">Tu n'as pas fait ta partie !</div>
+                </div>
+                <div class="comic-panel">
+                    <div class="speech-bubble oussama">Je pensais que c'était toi...</div>
+                </div>
+                <div class="comic-panel" style="background: var(--comic-yellow);">
+                    <div class="comic-explosion">BOOM!</div>
+                </div>
+            </div>
+            <div class="center-all" style="grid-column: span 12; grid-row: span 3; display: flex; justify-content: center; align-items: center; margin-top: 40px;">
+                <div class="comic-word statement-badge">
+                    Mauvaise communication ➔ malentendu ➔ conflit
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 04: CAUSES -->
+        <section class="slide" id="slide-4">
+            <h2 class="section-title">🔎 Pourquoi les conflits apparaissent ?</h2>
+            <div class="split-comic" style="grid-row: span 4; gap: 30px; margin-top: 20px;">
+                <div class="keyword">💬 Mauvaise communication</div>
+                <div class="keyword">🎯 Objectifs différents</div>
+                <div class="keyword">😤 Émotions fortes</div>
+                <div class="keyword">❌ Malentendus</div>
+            </div>
+            <div class="split-comic" style="grid-row: span 5; margin-top: 40px;">
+                <div class="flex-column">
+                    <div class="character taha">TAHA</div>
+                    <div class="speech-bubble taha">Donc le problème n'est pas toujours la personne ?</div>
+                </div>
+                <div class="flex-column">
+                    <div class="character oussama">OUSSAMA</div>
+                    <div class="speech-bubble oussama">Exactement. Cherchons d'abord la cause.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 05: EMOTIONS -->
+        <section class="slide" id="slide-5">
+            <div class="center-all" style="grid-column: span 12; grid-row: span 12; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 40px;">
+                <div class="comic-explosion stop-sign" style="color: var(--comic-red); background: white; border-color: var(--ink-black); padding: 20px 60px; transform: rotate(-2deg); box-shadow: 15px 15px 0 black;">🛑 STOP !</div>
+                <div class="split-comic" style="margin: 0; width: 100%; grid-row: auto;">
+                    <div class="flex-column">
+                        <div class="character taha" style="animation: shake-light 0.5s infinite;">TAHA</div>
+                        <div class="speech-bubble taha" style="margin-top: 20px;">Je suis trop énervé !</div>
+                    </div>
+                    <div class="flex-column">
+                        <div class="character oussama">OUSSAMA</div>
+                        <div class="speech-bubble oussama" style="margin-top: 20px;">Alors faisons une pause.</div>
+                    </div>
+                </div>
+                <div class="comic-panel flow-bar">
+                    <span style="display: flex; align-items: center; gap: 10px;">🛑 STOP</span>
+                    <span class="flow-arrow">➔</span>
+                    <span style="display: flex; align-items: center; gap: 10px;">😮 RESPIRER</span>
+                    <span class="flow-arrow">➔</span>
+                    <span style="display: flex; align-items: center; gap: 10px;">🧠 RÉFLÉCHIR</span>
+                    <span class="flow-arrow">➔</span>
+                    <span style="display: flex; align-items: center; gap: 10px;">💬 PARLER</span>
+                </div>
+                <div class="comic-explosion mid-burst">CALM DOWN!</div>
+            </div>
+        </section>
+
+        <!-- SLIDE 06: ACTIVE LISTENING -->
+        <section class="slide" id="slide-6">
+            <h2 class="section-title">👂 Écouter pour comprendre</h2>
+            <div class="split-comic" style="grid-row: span 5; margin-top: 20px;">
+                <div class="flex-column">
+                    <div class="character taha">TAHA</div>
+                    <div class="speech-bubble taha">Tu ne respectes jamais mes idées !</div>
+                </div>
+                <div class="flex-column">
+                    <div class="character oussama">OUSSAMA</div>
+                    <div class="speech-bubble oussama">Si je comprends bien, tu veux que tes idées soient davantage prises en compte ?</div>
+                </div>
+            </div>
+            <div class="comic-panel" style="grid-column: span 12; grid-row: span 4; display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 60px; background: #fcfcfc; margin-top: 40px;">
+                <div class="comic-word big-word" style="color: var(--comic-blue);">ÉCOUTE ACTIVE</div>
+                <ul class="checklist">
+                    <li style="margin-bottom: 10px;">✅ Ne pas interrompre</li>
+                    <li style="margin-bottom: 10px;">✅ Regarder la personne</li>
+                    <li style="margin-bottom: 10px;">✅ Reformuler</li>
+                    <li>✅ Poser des questions</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- SLIDE 07: ASSERTIVE -->
+        <section class="slide" id="slide-7">
+            <h2 class="section-title">💬 Parler sans agresser</h2>
+            <div class="grid-panels" style="grid-template-columns: 1fr 1fr; grid-row: span 5; margin-top: 20px;">
+                <div class="comic-panel" style="border-color: var(--comic-red); border-width: 6px;">
+                    <div class="comic-word panel-title" style="color: var(--comic-red);">❌ AGRESSIF</div>
+                    <div class="speech-bubble big-bubble" style="margin-top: 30px; border-color: var(--comic-red);">"C'est toujours de ta faute !"</div>
+                </div>
+                <div class="comic-panel" style="border-color: var(--comic-blue); border-width: 6px;">
+                    <div class="comic-word panel-title" style="color: var(--comic-blue);">✅ ASSERTIF</div>
+                    <div class="speech-bubble big-bubble" style="margin-top: 30px; border-color: var(--comic-blue);">"Je suis en désaccord parce que..."</div>
+                </div>
+            </div>
+            <div class="split-comic" style="grid-row: span 5; margin-top: 40px;">
+                <div class="flex-column">
+                    <div class="character taha">TAHA</div>
+                    <div class="speech-bubble taha">Je peux exprimer mon désaccord sans attaquer ?</div>
+                </div>
+                <div class="flex-column">
+                    <div class="character oussama">OUSSAMA</div>
+                    <div class="speech-bubble oussama">Oui. C'est la communication assertive.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 08: SOLUTION -->
+        <section class="slide" id="slide-8">
+            <h2 class="section-title">🤝 Cherchons une solution</h2>
+            <div class="split-comic" style="grid-row: span 5; margin-top: 20px;">
+                <div class="flex-column">
+                    <div class="character oussama">OUSSAMA</div>
+                    <div class="speech-bubble oussama">Quelle solution pourrait convenir aux deux ?</div>
+                </div>
+                <div class="flex-column">
+                    <div class="character taha">TAHA</div>
+                    <div class="speech-bubble taha">On partage le travail et on fixe une deadline.</div>
+                </div>
+            </div>
+            <div class="comic-panel" style="grid-column: span 12; grid-row: span 4; display: flex; flex-direction: row; align-items: center; justify-content: space-around; padding: 40px; margin-top: 40px;">
+                <div class="steps-row">
+                    <span>1. Identifier</span> <span style="color: var(--comic-red);">➔</span> <span>2. Écouter</span> <span style="color: var(--comic-red);">➔</span> <span>3. Proposer</span> <span style="color: var(--comic-red);">➔</span> <span>4. Décider</span>
+                </div>
+                <div class="comic-explosion">TEAMWORK!</div>
+            </div>
+        </section>
+
+        <!-- SLIDE 09: TRANSFORMATION -->
+        <section class="slide" id="slide-9">
+            <h2 class="section-title">✨ Transformer le conflit</h2>
+            <div class="grid-panels" style="grid-template-columns: 1fr 1fr; gap: 40px; grid-row: span 6; margin-top: 20px;">
+                <div class="comic-panel compare-panel compare-avant" style="border-width: 6px;">
+                    <div class="comic-word panel-title" style="color: var(--comic-red);">AVANT</div>
+                    <div class="panel-list">
+                        😡 Colère<br>💬 Accusation<br>🚫 Blocage
+                    </div>
+                    <div class="comic-explosion" style="background: white; margin-top: 20px; transform: rotate(5deg);">CRACK!</div>
+                </div>
+                <div class="comic-panel compare-panel compare-apres" style="border-width: 6px;">
+                    <div class="comic-word panel-title" style="color: var(--ink-black);">APRÈS</div>
+                    <div class="panel-list">
+                        💬 Dialogue<br>👂 Compréhension<br>🤝 Solution
+                    </div>
+                    <div class="comic-explosion" style="background: white; margin-top: 20px; transform: rotate(-5deg);">BAM!</div>
+                </div>
+            </div>
+            <div class="center-all" style="grid-column: span 12; grid-row: span 3; text-align: center; margin-top: 40px;">
+                <div class="comic-word statement-badge">
+                    CONFLIT ➔ COMPRÉHENSION ➔ SOLUTION
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 10: CONCLUSION -->
+        <section class="slide" id="slide-10">
+            <div class="center-all final-layout">
+                <h1 class="section-title final-title" style="text-align: center; border: none; margin-bottom: 10px;">CONFLIT ≠ FIN</h1>
+                
+                <div class="comic-panel flow-card">
+                    CONFLIT <br>
+                    <span style="color: var(--comic-red);">⬇️</span> <br>
+                    💬 COMMUNIQUER <br>
+                    <span style="color: var(--comic-red);">⬇️</span> <br>
+                    🤝 COMPRENDRE <br>
+                    <span style="color: var(--comic-red);">⬇️</span> <br>
+                    💡 RÉSOUDRE
+                </div>
+
+                <div class="split-comic" style="margin-bottom: 20px; width: 100%; grid-row: auto;">
+                    <div class="flex-column">
+                        <div class="character taha">TAHA</div>
+                        <div class="speech-bubble taha" style="margin-top: 20px;">Alors, la meilleure arme&nbsp;?</div>
+                    </div>
+                    <div class="flex-column">
+                        <div class="character oussama">OUSSAMA</div>
+                        <div class="speech-bubble oussama" style="margin-top: 20px;">La communication.</div>
+                    </div>
+                </div>
+
+                <div class="comic-explosion mid-burst" style="background: var(--comic-yellow); transform: rotate(2deg);">💥 COMMUNICATION = SOLUTION</div>
+                <div class="comic-word final-merci">Merci !</div>
+            </div>
+        </section>
+    </main>
+
+    <nav class="presentation-controls" aria-label="Navigation de la présentation">
+        <button id="menuBtn" class="ctrl-btn" title="Sommaire (M)" aria-label="Ouvrir le sommaire">☰</button>
+        <button id="prevBtn" class="nav-btn" title="Précédent (←)" aria-label="Diapositive précédente">
+            <span class="nav-btn__glyph" aria-hidden="true">◀</span>
+            <span class="nav-btn__label">PRÉCÉDENT</span>
+        </button>
+        <div class="counter-wrap">
+            <div id="slideCounter" aria-live="polite">1 / 10</div>
+            <div class="progress-bar"><div id="progressFill"></div></div>
+            <div class="progress-container" id="dotsWrap"></div>
+        </div>
+        <button id="nextBtn" class="nav-btn" title="Suivant (→)" aria-label="Diapositive suivante">
+            <span class="nav-btn__label">SUIVANT</span>
+            <span class="nav-btn__glyph" aria-hidden="true">▶</span>
+        </button>
+        <span class="nav-divider" aria-hidden="true"></span>
+        <button id="soundBtn" class="ctrl-btn" title="Son (S)" aria-label="Activer le son" aria-pressed="false">🔇</button>
+        <button id="fsBtn" class="ctrl-btn" title="Plein écran (F)" aria-label="Basculer le plein écran">⛶</button>
+        <button id="helpBtn" class="ctrl-btn" title="Aide (?)" aria-label="Afficher l'aide">?</button>
+    </nav>
+
+    <aside class="slide-menu" id="slideMenu" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="menuTitle">
+        <div class="slide-menu-inner">
+            <div class="slide-menu-header">
+                <div class="comic-explosion" id="menuTitle" style="font-size: 1.6rem;">LE PROGRAMME</div>
+                <button id="menuClose" class="ctrl-btn" title="Fermer (Échap)" aria-label="Fermer le sommaire">✕</button>
+            </div>
+            <div class="slide-menu-grid" id="menuGrid"></div>
+        </div>
+    </aside>
+
+    <div class="help-overlay" id="helpOverlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+        <div class="help-card">
+            <div class="comic-explosion" id="helpTitle" style="font-size: 1.8rem;">COMMANDES</div>
+            <div class="help-keys">
+                <div><kbd>→</kbd><kbd>Space</kbd><span>Suivant</span></div>
+                <div><kbd>←</kbd><span>Précédent</span></div>
+                <div><kbd>1</kbd>–<kbd>0</kbd><span>Aller au slide</span></div>
+                <div><kbd>Home</kbd>/<kbd>End</kbd><span>Début / Fin</span></div>
+                <div><kbd>M</kbd><span>Sommaire</span></div>
+                <div><kbd>F</kbd><span>Plein écran</span></div>
+                <div><kbd>S</kbd><span>Activer le son</span></div>
+                <div><kbd>Échap</kbd><span>Fermer</span></div>
+            </div>
+            <p class="help-tip">Astuce : molette, swipe ou clic sur les points fonctionnent aussi.</p>
+            <button id="helpClose" class="nav-btn">Fermer</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/presentation.js') }}"></script>
+</body>
+</html>
