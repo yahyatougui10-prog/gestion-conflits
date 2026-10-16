@@ -1,3 +1,5 @@
+const TRANSITIONS = ['wipe', 'fade', 'push', 'zoom'];
+
 class PresentationController {
     constructor() {
         this.slides = [];
@@ -8,6 +10,11 @@ class PresentationController {
         this.wheelLock = false;
         this.soundOn = false;
         this.audioCtx = null;
+        this.revealIndex = 0;
+        this.pendingBuild = false;
+        this.inBuild = false;
+        this.buildSteps = [];
+        this.STEPPED = '.grid-panels, .type-grid, .nature-grid, .style-grid, .cnv-grid';
         this.init();
     }
 
@@ -16,8 +23,15 @@ class PresentationController {
         await this.loadSlides();
         this.buildDots();
         this.buildMenu();
-        this.updateUI();
+        this.cacheDom();
+        this.updateUI('next');
         this.startControlTimer();
+    }
+
+    cacheDom() {
+        this.allSlides = document.querySelectorAll('.slide');
+        this.dotEls = this.el.dots.querySelectorAll('.progress-dot');
+        this.menuCardEls = this.el.menuGrid.querySelectorAll('.menu-card');
     }
 
     bindEvents() {
@@ -39,8 +53,8 @@ class PresentationController {
             controls: document.querySelector('.presentation-controls'),
         };
 
-        this.el.prev.addEventListener('click', () => this.previousSlide());
-        this.el.next.addEventListener('click', () => this.nextSlide());
+        this.el.prev.addEventListener('click', () => this.prev());
+        this.el.next.addEventListener('click', () => this.next());
         this.el.menuBtn.addEventListener('click', () => this.toggleMenu());
         this.el.menuClose.addEventListener('click', () => this.closeMenu());
         this.el.sound.addEventListener('click', () => this.toggleSound());
@@ -59,7 +73,7 @@ class PresentationController {
 
         document.addEventListener('keydown', (e) => this.handleKeydown(e));
 
-        window.addEventListener('wheel', (e) => this.handleWheel(e), { passive: false });
+        window.addEventListener('wheel', (e) => this.handleWheel(e), { passive: true });
 
         document.addEventListener('touchstart', (e) => {
             this.swipeStart = e.touches[0].clientX;
@@ -68,7 +82,7 @@ class PresentationController {
             if (this.swipeStart === null) return;
             const dx = e.changedTouches[0].clientX - this.swipeStart;
             if (Math.abs(dx) > 60) {
-                dx > 0 ? this.previousSlide() : this.nextSlide();
+                dx > 0 ? this.prev() : this.next();
             }
             this.swipeStart = null;
         }, { passive: true });
@@ -155,13 +169,13 @@ class PresentationController {
             case 'PageDown':
             case ' ':
                 e.preventDefault();
-                this.nextSlide();
+                this.next();
                 break;
             case 'ArrowLeft':
             case 'ArrowUp':
             case 'PageUp':
                 e.preventDefault();
-                this.previousSlide();
+                this.prev();
                 break;
             case 'Home':
                 e.preventDefault();
@@ -205,12 +219,36 @@ class PresentationController {
         }
         if (Math.abs(e.deltaY) < 30) return;
         this.wheelLock = true;
-        e.deltaY > 0 ? this.nextSlide() : this.previousSlide();
+        e.deltaY > 0 ? this.next() : this.prev();
         setTimeout(() => { this.wheelLock = false; }, 700);
+    }
+
+    next() {
+        if (this.inBuild && this.revealIndex < this.buildSteps.length - 1) {
+            this.revealIndex++;
+            this.revealStep(this.buildSteps[this.revealIndex]);
+            if (this.soundOn) this.pop();
+            this.updateControls();
+            this.startControlTimer();
+            return;
+        }
+        this.nextSlide();
+    }
+
+    prev() {
+        if (this.inBuild && this.revealIndex >= 0) {
+            this.hideStep(this.buildSteps[this.revealIndex]);
+            this.revealIndex--;
+            this.updateControls();
+            this.startControlTimer();
+            return;
+        }
+        this.previousSlide();
     }
 
     nextSlide() {
         if (this.currentIndex < this.totalSlides - 1) {
+            this.pendingBuild = true;
             this.currentIndex++;
             this.updateUI('next');
         }
@@ -218,6 +256,7 @@ class PresentationController {
 
     previousSlide() {
         if (this.currentIndex > 0) {
+            this.pendingBuild = false;
             this.currentIndex--;
             this.updateUI('prev');
         }
@@ -225,13 +264,94 @@ class PresentationController {
 
     goToSlide(n) {
         if (n >= 1 && n <= this.totalSlides) {
+            this.pendingBuild = false;
             this.currentIndex = n - 1;
-            this.updateUI();
+            this.updateUI('next');
         }
     }
 
+    isStepped(el) {
+        return typeof el.matches === 'function' && el.matches(this.STEPPED);
+    }
+
+    // Découpe la slide en étapes : chaque bloc, ou chaque carte d'une grille, est une étape.
+    computeSteps(slide) {
+        const blocks = [...slide.children];
+        const steps = [];
+        for (let i = 1; i < blocks.length; i++) {
+            const b = blocks[i];
+            if (this.isStepped(b)) {
+                const kids = [...b.children];
+                if (kids.length === 0) {
+                    steps.push({ plain: [], anim: [b] });
+                } else {
+                    steps.push({ plain: [b], anim: [kids[0]] });
+                    for (let j = 1; j < kids.length; j++) steps.push({ plain: [], anim: [kids[j]] });
+                }
+            } else {
+                steps.push({ plain: [], anim: [b] });
+            }
+        }
+        return steps;
+    }
+
+    setupBuild(slide) {
+        // nettoyer tout état de build (blocs ET cartes imbriquées)
+        slide.querySelectorAll('.build-shown, .build-hidden').forEach((el) => {
+            el.classList.remove('build-shown', 'build-hidden');
+        });
+        void slide.offsetWidth; // reflow pour relancer les animations
+
+        const blocks = [...slide.children];
+        const steps = this.computeSteps(slide);
+        this.buildSteps = steps;
+
+        const buildMode = this.pendingBuild && steps.length > 0;
+        this.inBuild = buildMode;
+        this.revealIndex = -1;
+
+        if (buildMode) {
+            blocks.forEach((b, i) => {
+                if (i === 0) b.classList.add('build-shown');
+                else b.classList.add('build-hidden');
+            });
+            // masquer les cartes des conteneurs pour ne les révéler qu'une par une
+            slide.querySelectorAll(this.STEPPED).forEach((c) => {
+                [...c.children].forEach((k) => k.classList.add('build-hidden'));
+            });
+        } else {
+            // saut direct : tout apparaît d'un coup (avec pop)
+            blocks.forEach((b) => b.classList.add('build-shown'));
+            slide.querySelectorAll(this.STEPPED + ' > *').forEach((el) => el.classList.add('build-shown'));
+        }
+        this.pendingBuild = false;
+        this.updateControls();
+    }
+
+    revealStep(step) {
+        step.plain.forEach((el) => el.classList.remove('build-hidden'));
+        step.anim.forEach((el) => {
+            el.classList.remove('build-hidden');
+            el.classList.add('build-shown');
+        });
+    }
+
+    hideStep(step) {
+        [...step.plain, ...step.anim].forEach((el) => {
+            el.classList.remove('build-shown');
+            el.classList.add('build-hidden');
+        });
+    }
+
+    updateControls() {
+        const moreReveals = this.inBuild && this.revealIndex < this.buildSteps.length - 1;
+        this.el.prev.disabled = this.currentIndex === 0 && !(this.inBuild && this.revealIndex >= 0);
+        this.el.next.disabled = this.currentIndex === this.totalSlides - 1 && !moreReveals;
+        this.el.next.classList.toggle('build-pending', moreReveals);
+    }
+
     updateUI(direction = 'auto') {
-        const slides = document.querySelectorAll('.slide');
+        const slides = this.allSlides;
         slides.forEach((slide, index) => {
             const isActive = index === this.currentIndex;
             slide.classList.toggle('active', isActive);
@@ -239,7 +359,7 @@ class PresentationController {
 
         this.el.bar.style.width = `${((this.currentIndex + 1) / this.totalSlides) * 100}%`;
 
-        document.querySelectorAll('.progress-dot').forEach((dot, index) => {
+        this.dotEls.forEach((dot, index) => {
             const isActive = index === this.currentIndex;
             dot.classList.toggle('active', isActive);
             if (isActive) dot.setAttribute('aria-current', 'true');
@@ -248,12 +368,10 @@ class PresentationController {
             else dot.classList.remove('done');
         });
 
-        this.el.counter.innerText = `${this.currentIndex + 1} / ${this.totalSlides}`;
+        const pad = (n) => String(n).padStart(2, '0');
+        this.el.counter.innerText = `${pad(this.currentIndex + 1)} / ${pad(this.totalSlides)}`;
 
-        this.el.prev.disabled = this.currentIndex === 0;
-        this.el.next.disabled = this.currentIndex === this.totalSlides - 1;
-
-        this.el.menuGrid.querySelectorAll('.menu-card').forEach((card, i) => {
+        this.menuCardEls.forEach((card, i) => {
             const isCurrent = i === this.currentIndex;
             card.classList.toggle('current', isCurrent);
             if (isCurrent) card.setAttribute('aria-current', 'true');
@@ -266,13 +384,15 @@ class PresentationController {
         const activeSlide = slides[this.currentIndex];
         if (activeSlide) {
             activeSlide.dataset.dir = direction;
+            activeSlide.dataset.transition = TRANSITIONS[this.currentIndex % TRANSITIONS.length];
             activeSlide.classList.remove('entering');
             void activeSlide.offsetWidth; // reflow to restart animation
             activeSlide.classList.add('entering');
             clearTimeout(this.enterTimer);
             this.enterTimer = setTimeout(() => {
                 activeSlide.classList.remove('entering');
-            }, 900);
+            }, 1250);
+            this.setupBuild(activeSlide);
         }
     }
 
